@@ -25,6 +25,8 @@ namespace MyListView
         GridView gv1 = new GridView();
         DataTemplate dtBig;
         DataTemplate dtSmall;
+        DataTemplate dtList;
+        ItemsPanelTemplate IPTTile;
         ItemsPanelTemplate IPTTable;
         ItemsPanelTemplate IPTList;
         ItemsPanelTemplate IPTBig;
@@ -41,14 +43,14 @@ namespace MyListView
             CreateBig();
             CreateSmall();
             CreateList();
-            CreateTableView();
-            
+            CreateTable();
+            CreateTile();
             Height = 600;
             Width = 1000;
             
         }
 
-        private void CreateTableView()
+        private void CreateTile()
         {
 
             GridViewColumn columnBrand = new GridViewColumn();
@@ -79,12 +81,12 @@ namespace MyListView
             gv.Columns.Add(columnImage);
 
             AutoList.View = gv;
-            IPTTable = new ItemsPanelTemplate();
-            FrameworkElementFactory WPFTable = new FrameworkElementFactory(typeof(StackPanel));
-            WPFTable.SetValue(WrapPanel.OrientationProperty, Orientation.Vertical);
-            IPTTable.VisualTree = WPFTable;
+            IPTTile = new ItemsPanelTemplate();
+            FrameworkElementFactory WPFTile = new FrameworkElementFactory(typeof(StackPanel));
+            WPFTile.SetValue(WrapPanel.OrientationProperty, Orientation.Vertical);
+            IPTTile.VisualTree = WPFTile;
         }
-        private void CreateList()
+        private void CreateTable()
         {
             GridViewColumn columnBrand = new GridViewColumn();
             GridViewColumnHeader headerBrand = new GridViewColumnHeader();
@@ -108,10 +110,51 @@ namespace MyListView
             gv1.Columns.Add(columnModel);
 
             AutoList.View = gv1;
+            IPTTable = new ItemsPanelTemplate();
+            FrameworkElementFactory WPFTable = new FrameworkElementFactory(typeof(StackPanel));
+            WPFTable.SetValue(WrapPanel.OrientationProperty, Orientation.Vertical);
+            IPTTable.VisualTree = WPFTable;
+        }
+        private void CreateList()
+        {
+            FrameworkElementFactory StackPanelF_List = new FrameworkElementFactory(typeof(StackPanel));
+            StackPanelF_List.SetValue(StackPanel.BackgroundProperty, Background = new SolidColorBrush(Colors.Beige));
+
+            FrameworkElementFactory ImageFB = new FrameworkElementFactory(typeof(Image));
+            ImageFB.SetValue(Image.SourceProperty, new Binding("Path"));
+            ImageFB.SetValue(Image.WidthProperty, Width = 100);
+            StackPanelF_List.AppendChild(ImageFB);
+
+            FrameworkElementFactory LableF = new FrameworkElementFactory(typeof(Label));
+            LableF.SetValue(Label.ContentProperty, new Binding("Model"));
+            LableF.SetValue(Label.WidthProperty, Width = 100);
+            StackPanelF_List.AppendChild(LableF);
+
+            FrameworkElementFactory LableC = new FrameworkElementFactory(typeof(Label));
+            LableC.SetValue(Label.ContentProperty, new Binding("Brand"));
+            LableC.SetValue(Label.WidthProperty, Width = 100);
+            StackPanelF_List.AppendChild(LableC);
+
+            dtList = new DataTemplate();
+
+            dtList.VisualTree = StackPanelF_List;
+
             IPTList = new ItemsPanelTemplate();
-            FrameworkElementFactory WPFList = new FrameworkElementFactory(typeof(StackPanel));
-            WPFList.SetValue(WrapPanel.OrientationProperty, Orientation.Vertical);
-            IPTList.VisualTree = WPFList;
+
+
+            FrameworkElementFactory SPF_List = new FrameworkElementFactory(typeof(StackPanel));
+            SPF_List.SetValue(StackPanel.OrientationProperty, Orientation.Vertical);
+
+            Binding B_W = new Binding("ActualWidth");
+            B_W.Source = this.AutoList;
+            SPF_List.SetValue(StackPanel.WidthProperty, B_W);
+
+            Binding B_H = new Binding("ActualHeight");
+            B_H.Source = this.AutoList;
+            SPF_List.SetValue(StackPanel.HeightProperty, B_H);
+
+
+            IPTList.VisualTree = SPF_List;
         }
         private void CreateBig()
         {
@@ -163,7 +206,7 @@ namespace MyListView
 
             FrameworkElementFactory ImageFB = new FrameworkElementFactory(typeof(Image));
             ImageFB.SetValue(Image.SourceProperty, new Binding("Path"));
-            ImageFB.SetValue(Image.WidthProperty, Width = 100);
+            ImageFB.SetValue(Image.WidthProperty, Width = 50);
             StackPanelF_Small.AppendChild(ImageFB);
 
             FrameworkElementFactory LableF = new FrameworkElementFactory(typeof(Label));
@@ -205,7 +248,7 @@ namespace MyListView
             switch ((sender as ComboBox).SelectedIndex)
             {
                 case 0:
-                    AutoList.ItemsPanel = IPTTable;
+                    AutoList.ItemsPanel = IPTTile;
                     AutoList.View = gv;
                     break;
                 case 1:
@@ -219,8 +262,13 @@ namespace MyListView
                     AutoList.View = null;
                     break;
                 case 3:
-                    AutoList.ItemsPanel = IPTList;
+                    AutoList.ItemsPanel = IPTTable;
                     AutoList.View = gv1;
+                    break;
+                case 4:
+                    AutoList.ItemTemplate = dtList;
+                    AutoList.ItemsPanel = IPTList;
+                    AutoList.View = null;
                     break;
                 default:
                     break;

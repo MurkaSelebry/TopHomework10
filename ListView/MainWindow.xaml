@@ -15,9 +15,10 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ComboBox Name="ViewType" Width="200" HorizontalAlignment="Left" SelectionChanged="ViewType_SelectionChanged" >
-            <ComboBoxItem>Таблица</ComboBoxItem>
+            <ComboBoxItem>Плитка</ComboBoxItem>
             <ComboBoxItem>Крупные значки</ComboBoxItem>
-            <ComboBoxItem>Мелки значки</ComboBoxItem>
+            <ComboBoxItem>Мелкие значки</ComboBoxItem>
+            <ComboBoxItem>Таблица</ComboBoxItem>
             <ComboBoxItem>Список</ComboBoxItem>
         </ComboBox>
 
